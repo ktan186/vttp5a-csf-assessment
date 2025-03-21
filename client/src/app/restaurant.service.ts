@@ -20,6 +20,7 @@ export class RestaurantService {
       password: user.password, 
       items: Array(items)
     }
+    console.log('posting: ' + body);
     return lastValueFrom(this.httpClient.post(`/api/food_order`, body));
   }
 
