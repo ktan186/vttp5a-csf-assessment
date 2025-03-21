@@ -69,7 +69,7 @@ public class RestaurantController {
     byte[] result = md.digest();
     String hash = new String(result);
 
-    JsonArray items = jObject.get("items").asJsonArray();
+    JsonArray items = jObject.getJsonArray("items");
     
 
     Double total = 0.00;

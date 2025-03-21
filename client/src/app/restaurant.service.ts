@@ -18,7 +18,7 @@ export class RestaurantService {
     const body = {
       username: user.username, 
       password: user.password, 
-      items: items
+      items: Array(items)
     }
     return lastValueFrom(this.httpClient.post(`/api/food_order`, body));
   }
