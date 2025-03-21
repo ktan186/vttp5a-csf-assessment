@@ -29,7 +29,7 @@ export class MenuStore extends ComponentStore<MenuState> {
     readonly error$: Observable<string | null> = this.select(state => state.error);
     readonly selectedMenuCount$: Observable<number> = this.select(state => state.selectedMenu.length);
     
-    readonly addMenu = this.updater((state, selectedMenu: Menu[]) => ({
+    readonly addMenu = this.updater((state, selectedMenu: Menu) => ({
         ...state, lineItems: [...state.selectedMenu, selectedMenu]
     }));
 

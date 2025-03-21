@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MenuStore } from '../menu.store';
 import { RestaurantService } from '../restaurant.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MenuService } from '../service/menu.service';
 
 @Component({
   selector: 'app-place-order',
@@ -16,18 +17,25 @@ export class PlaceOrderComponent implements OnInit {
   // TODO: Task 3
   
   // @Input({ required: true })
-  selectedItems!: Menu[];
+  selectedItems: Menu[] = [];
+
   orders!: Order[];
 
   private restaurantSvc = inject(RestaurantService);
   private menuStore = inject(MenuStore);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private menuSvc = inject(MenuService);
 
   protected form!: FormGroup;
 
   ngOnInit(): void {
-    this.selectedItems = this.menuStore.getSelectedMenus();
+    // this.selectedItems = this.menuStore.getSelectedMenus();
+    this.menuSvc.selectedItems$.subscribe(data => {
+      this.selectedItems = data;
+      console.log('selected: ' + this.selectedItems);
+    })
+    
     this.form = this.createForm();
   }
 
@@ -62,8 +70,14 @@ export class PlaceOrderComponent implements OnInit {
     
     this.restaurantSvc.postOrder(user, finalOrder).then(data => {
       console.log(data);
+      const date = data.timestamp;
+      const orderId = data.orderId;
+      const paymentId = data.paymentId;
+      const total = data.total;
+      this.router.navigate(['/confirm', date, '/', orderId, '/', paymentId, '/', total]);
     }).catch(err => {
       console.error(err);
+      alert(err.message);
     })
   }
 

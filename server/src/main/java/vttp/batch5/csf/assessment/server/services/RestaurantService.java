@@ -11,9 +11,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import jakarta.json.Json;
+import vttp.batch5.csf.assessment.server.models.Item;
 import vttp.batch5.csf.assessment.server.models.Menu;
 import vttp.batch5.csf.assessment.server.models.User;
 import vttp.batch5.csf.assessment.server.repositories.OrdersRepository;
@@ -39,7 +41,7 @@ public class RestaurantService {
     return restaurantRepo.getUser(username);
   }
 
-  public ResponseEntity<String> postPayment(String orderId, String payer, Integer amount) {
+  public ResponseEntity<String> postPayment(String orderId, String payer, Double amount) {
     String url = "https://payment-service-production-a75a.up.railway.app/";
 
     JsonObject json = Json.createObjectBuilder()
@@ -52,6 +54,7 @@ public class RestaurantService {
     HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    headers.add("X-Authenticate", payer);
 
     String payload = json.toString();
 
@@ -68,5 +71,15 @@ public class RestaurantService {
 			throw e;
 		}
   }
+
+  @Transactional
+  public void insertOrderToDB(String orderId, String paymentId, String username, Long timestamp, Double total, List<Item> items) {
+    Boolean added = restaurantRepo.addOrderDetails(orderId, paymentId, timestamp, total, username);
+    if (added = false) {
+      throw new RuntimeException();
+    }
+    ordersRepo.addOrder(orderId, paymentId, username, timestamp, items);
+  }
+
 
 }

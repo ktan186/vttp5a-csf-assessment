@@ -3,7 +3,8 @@ import { Menu } from '../models';
 import { RestaurantService } from '../restaurant.service';
 import { MenuStore } from '../menu.store';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { MenuService } from '../service/menu.service';
 
 @Component({
   selector: 'app-menu',
@@ -19,12 +20,12 @@ export class MenuComponent implements OnInit {
   selected: Menu[] = [];
 
   @Output()
-  sendSelectedItems = new Subject<Menu[]>;
-
+  sendSelectedItems = new BehaviorSubject<Menu[]>(this.selected);
 
   private restaurantSvc = inject(RestaurantService);
   private menuStore = inject(MenuStore);
   private router = inject(Router);
+  private menuSvc = inject(MenuService);
 
   ngOnInit(): void {
     this.restaurantSvc.getMenuItems().then(data => {
@@ -93,8 +94,8 @@ export class MenuComponent implements OnInit {
 
   placeOrder() {
     // this.sendSelectedItems.next(this.selected);
-    this.menuStore.addMenu(this.selected);
-    console.log("store: ", this.menuStore.getSelectedMenus);
+    this.menuSvc.setSelectedItems(this.selected);
+    // console.log("store: ", this.menuStore.getSelectedMenus);
     this.router.navigate(['/place']);
   }
 }
