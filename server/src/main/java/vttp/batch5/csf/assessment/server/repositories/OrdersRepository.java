@@ -1,10 +1,23 @@
 package vttp.batch5.csf.assessment.server.repositories;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.bson.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+
+import vttp.batch5.csf.assessment.server.models.Menu;
 
 
 @Repository
 public class OrdersRepository {
+
+  @Autowired
+  private MongoTemplate mongoTemplate;
 
   // TODO: Task 2.2
   // You may change the method's signature
@@ -12,7 +25,21 @@ public class OrdersRepository {
   //
   //  Native MongoDB query here
   //
-  public void getMenu() {
+    // db.menus.find().sort({name: 1})
+  public List<Menu> getMenu() {
+    Query query = new Query().with(Sort.by(Sort.Direction.ASC, "name"));
+    List<Document> results = mongoTemplate.find(query, Document.class, "menus");
+
+    List<Menu> menus = new LinkedList<>();
+    for (Document d: results) {
+      Menu m = new Menu();
+      m.setId(d.getString("_id"));
+      m.setName(d.getString("name"));
+      m.setDescription(d.getString("description"));
+      m.setPrice(d.getDouble("price"));
+      menus.add(m);
+    }
+    return menus;
   }
 
   // TODO: Task 4

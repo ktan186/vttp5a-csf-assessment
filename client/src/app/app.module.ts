@@ -9,15 +9,17 @@ import { MenuComponent } from './components/menu.component';
 import { PlaceOrderComponent } from './components/place-order.component';
 
 import { ConfirmationComponent } from './components/confirmation.component';
+import { AppRoutingModule } from './app-routing.module';
+import { RestaurantService } from './restaurant.service';
 
 @NgModule({
   declarations: [
     AppComponent, MenuComponent, PlaceOrderComponent, ConfirmationComponent
   ],
   imports: [
-    BrowserModule, ReactiveFormsModule
+    BrowserModule, ReactiveFormsModule, AppRoutingModule
   ],
-  providers: [ provideHttpClient() ],
+  providers: [ provideHttpClient(), RestaurantService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

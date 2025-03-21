@@ -1,35 +1,38 @@
 <div class="row mt-3">
   <div class="col d-flex justify-content-between align-items-center">
-    <div class="fs-1 fw-bold text-primary">Menu ($XXX)</div>
+    <div class="fs-1 fw-bold text-primary">Menu (${{ getTotalPrice() | number: '1.2-2' }})</div>
     <div>
-      <button type="button" class="btn btn-primary">
-        Place Order (XXX)
+      <button type="button" class="btn btn-primary" (click)="placeOrder()">
+        Place Order ({{ getCount() }})
       </button>
     </div>
   </div>
 </div>
 
 <!-- each row display a single mene item -->
-<div class="row mb-2">
+<div class="row mb-2" *ngFor="let m of menus">
   <div class="col">
     <div class="menu-item">
       <div>
-        <button type="button" class="btn btn-warning">
+        <button type="button" class="btn btn-warning" (click)="reduceQuantity(m)">
           <i class="bi bi-x-square"></i>
         </button>
       </div>
       <div class="menu-details">
-        <div>Name: <span class="fw-bold"> XXX </span> </div>
+        <div>Name: <span class="fw-bold"> {{ m.name }} </span> </div>
         <div>Description:
           <span class="fst-italic">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            {{ m.description }}
           </span>
         </div>
+        <div>
+          Price: ${{ m.price }}
+        </div>
         <div></div>
-          <div class="text-danger fw-bold">Quantity: XXX</div>
+          <div class="text-danger fw-bold">Quantity: {{ getQuantity(m) }}</div>
       </div>
       <div class="menu-button-end">
-        <button type="button" class="btn btn-success">
+        <button type="button" class="btn btn-success" (click)="addQuantity(m)">
           <i class="bi bi-plus-circle"></i>
         </button>
       </div>
@@ -37,29 +40,6 @@
   </div>
 </div>
 
-<div class="row mb-2">
-  <div class="col">
-    <div class="menu-item">
-      <div>
-        <button type="button" class="btn btn-warning">
-          <i class="bi bi-x-square"></i>
-        </button>
-      </div>
-      <div class="menu-details">
-        <div>Name: <span class="fw-bold"> XXX </span> </div>
-        <div>Description:
-          <span class="fst-italic">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-          </span>
-        </div>
-        <div></div>
-          <div class="text-danger fw-bold">Quantity: XXX</div>
-      </div>
-      <div class="menu-button-end">
-        <button type="button" class="btn btn-success">
-          <i class="bi bi-plus-circle"></i>
-        </button>
-      </div>
-    </div>
-  </div>
+<div hidden>
+  <app-place-order [selectedItems]="selected"/>
 </div>
