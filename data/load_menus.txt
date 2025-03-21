@@ -1,3 +1,5 @@
 # TODO: Task 1.1
 
 mongoimport --uri="mongodb://localhost:27017" -d restaurant -c menus --file=menus.json --jsonArray
+
+mongoimport --uri="mongodb://mongo:nWPPuQgOesHqPCUMefaneXcnUArDBzNP@centerbeam.proxy.rlwy.net:53884/restaurant" -d restaurant -c menus --file=menus.json --jsonArray  --authenticationDatabase=admin

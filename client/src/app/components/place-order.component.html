@@ -46,14 +46,16 @@
           <th></th>
         </tr>
       </thead>
-      <tbody *ngFor="let item of selectedItems; index as i">
-        <tr>
-          <td> {{ i }} </td>
-          <td> {{ item.name }} </td>
-          <td> {{ item.price }} </td>
-          <td> {{ item.quantity }} </td>
-          <td> {{ item.price * item.quantity }} </td>
-        </tr>
+      <tbody>
+        @for (i of items$ | async; track i) {
+          <tr>
+            <td> {{ i.id }}</td>
+            <td> {{ i.name }} </td>
+            <td> {{ i.price }} </td>
+            <td> {{ i.quantity }} </td>
+            <td> {{ i.price * i.quantity }} </td>
+          </tr>
+        }
       </tbody>
       <tfoot>
         <tr>

@@ -30,7 +30,11 @@ export class MenuStore extends ComponentStore<MenuState> {
     readonly selectedMenuCount$: Observable<number> = this.select(state => state.selectedMenu.length);
     
     readonly addMenu = this.updater((state, selectedMenu: Menu) => ({
-        ...state, lineItems: [...state.selectedMenu, selectedMenu]
+        ...state, selectedMenu: [...state.selectedMenu, selectedMenu]
+    }));
+
+    readonly removeMenu = this.updater((state, selectedMenuId: string) => ({
+        ...state, selectedMenu: state.selectedMenu.filter(menu => menu.id !== selectedMenuId)
     }));
 
     getSelectedMenus(): Menu[] {

@@ -28,6 +28,7 @@ export class MenuComponent implements OnInit {
   private menuSvc = inject(MenuService);
 
   ngOnInit(): void {
+    this.menuStore.clearSelectedMenu();
     this.restaurantSvc.getMenuItems().then(data => {
       console.log(data);
       this.menus = data;
@@ -49,6 +50,7 @@ export class MenuComponent implements OnInit {
       this.selected = this.selected.filter(m => m.id !== menu.id);
       this.selected.push(menu);
     }
+    this.menuStore.addMenu(m);
   }
   
   reduceQuantity(m: Menu) {
@@ -58,9 +60,12 @@ export class MenuComponent implements OnInit {
       menu.quantity--;
       if (menu.quantity <= 0) {
         menu.quantity = 0;
+        this.menuStore.removeMenu(m.id);
       }
       this.selected = this.selected.filter(sMenu => sMenu.id !== menu.id);
+      this.menuStore.removeMenu(m.id);
       this.selected.push(menu);
+      this.menuStore.addMenu(menu);
     }
   }
 

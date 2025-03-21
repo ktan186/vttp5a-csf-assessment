@@ -59,6 +59,7 @@ public class RestaurantController {
   public ResponseEntity<String> postFoodOrder(@RequestBody String payload) throws NoSuchAlgorithmException {
     JsonReader jReader = Json.createReader(new StringReader(payload));
     JsonObject jObject = jReader.readObject();
+    System.out.println(jObject);
 
     String username = jObject.getString("username");
     String rawPassword = jObject.getString("password");
@@ -68,7 +69,7 @@ public class RestaurantController {
     byte[] result = md.digest();
     String hash = new String(result);
 
-    JsonArray items = jObject.getJsonArray("items");
+    JsonArray items = jObject.get("items").asJsonArray();
     
 
     Double total = 0.00;
